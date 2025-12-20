@@ -11,6 +11,37 @@ body{
     padding: 0;
 }
 
+/* Search bar */
+
+label[for="search"] {
+    border: 1px solid blue;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20rem;
+}
+
+label input,
+label button {
+    border: none;
+    height: 100%;
+}
+
+label input {
+    border: 1px solid red;
+    width: 100%;
+    padding: 1rem;
+}
+
+label button {
+    border: 1px solid red;
+    width: 2rem;
+}
+
+
+/* Content head */
+
 .container-head {
     border: 1px solid red;
     display: flex;
@@ -27,17 +58,19 @@ body{
     display: flex;
     justify-content: start;
     align-items: center;
+    gap: 1rem;
+    padding: 1rem;
 }
 .weather-icon, .weather-temp {
     border: 1px solid rgb(255, 0, 162);
-    height: 6rem;
+    height: 100%;
     width: 6rem;
 }
 
 
 .weather-info {
     border: 1px solid rgb(255, 0, 162);
-    height: 6rem;
+    height: 100%;
     width: 8rem;
 }
 
@@ -45,4 +78,33 @@ body{
     border: 2px solid green;
     width: 50%;
     height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    padding: 1rem;
+}
+
+.weather-title, .weather-date, .weather-description {
+    border: 1px solid rgb(119, 0, 231);
+    height: 100%;
+}
+
+/* Content body */
+
+.container-body {
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    gap: 1rem;
+    padding: 1rem;
+
+}
+
+.container-body .weather-card {
+    border: 1px solid rgb(119, 0, 231);
+    height: 10rem;
+    width: 100%
 }

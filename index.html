@@ -6,7 +6,11 @@
     <link rel="stylesheet" href="./styles.css">
     <script src="./scripts.js"></script>
     <body>
-        <h1>Weather App</h1>
+        <h1>Weather app</h1>
+        <label for="search">
+            <input type="search" id="search" name="search" placeholder="Search location">
+            <button>Q</button>
+        </label>
         <div class="container-head">
             <div class="div-left">
                 <div class="weather-icon">weather icon</div>
@@ -14,9 +18,17 @@
                 <div class="weather-info">weather info</div>
             </div>
             <div class="div-right">
-                <!-- <div class="weather-icon">weather icon</div> -->
+                <div class="weather-title">tilte</div>
+                <div class="weather-date">weather day : time</div>
+                <div class="weather-description">weather description</div>
             </div>
         </div>
-        <div class="container-body">body content</div>
+        <div class="container-body">
+            <div class="weather-card" id="weather-card1"></div>
+            <div class="weather-card" id="weather-card2"></div>
+            <div class="weather-card" id="weather-card3"></div>
+            <div class="weather-card" id="weather-card4"></div>
+            <div class="weather-card" id="weather-card5"></div>
+        </div>
     </body>
 </html>
