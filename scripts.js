@@ -3,9 +3,9 @@ clog("Welcome!")
 
 // Code
 
-let dateNow = new Date()
-let dateNowHours = dateNow.getHours()
-let dateNowDay = dateNow.getUTCDay()
+const dateNow = new Date()
+const dateNowHours = dateNow.getHours()
+const dateNowDay = dateNow.getUTCDay()
 dayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 const getDayString = function(){
     return dayArray[dateNowDay]
@@ -14,17 +14,14 @@ const getDayString = function(){
 clog(dateNowDay)
 clog(getDayString())
 
-const getRawWeatherData = async function(location = "london", selectedMetric) {
-    let url
-    let serverBaseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
-    let apiKey = "7SZB422JF2656H4U2T3XMFNE5"
-    if(selectedMetric === "us-metric"){ url = `${serverBaseUrl}/${location}?key=${apiKey}`}
-    else if (selectedMetric === "intl-metric") {url = `${serverBaseUrl}/${location}?unitGroup=metric&key=${apiKey}`}
-    else {url = `${serverBaseUrl}/${location}?key=${apiKey}`}
+const getRawWeatherData = async function(location = "london") {
+    const serverBaseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
+    const apiKey = "7SZB422JF2656H4U2T3XMFNE5"
+    const url = `${serverBaseUrl}/${location}?key=${apiKey}`
     
     try {
-    let rawWeatherData = await fetch( url )
-    let weatherData = await rawWeatherData.json()
+    const rawWeatherData = await fetch( url )
+    const weatherData = await rawWeatherData.json()
     return weatherData
 
     } catch(error) {clog(error)}
@@ -40,24 +37,11 @@ const weatherToday = async function(location, selectedMetric) {
     let description = weatherData.days[0].description
     let dayConditions = weatherData.days[0].hours[dateNowHours]
     let address = weatherData.address
-    return {data, icon, description, dayConditions, address }
+    let data15Days = weatherData.days
+    // clog(data15Days)
+    return {data, icon, description, dayConditions, address, data15Days }
 }
 // clog( weatherToday("paris").then(msg => { clog(msg.description) }) )
-
-// clog( weatherToday("paris") ) 
-
-const weatherTomorrow = async function(location, selectedMetric) { 
-    let weatherData = await getRawWeatherData(location, selectedMetric)
-    clog("🔔 Raw weatherData below: ")
-    clog(weatherData)
-    let data = weatherData.days[1]
-    let icon = weatherData.days[1].icon
-    let description = weatherData.days[1].description
-    let dayConditions = weatherData.days[1].hours[dateNowHours]
-    let address = weatherData.address
-    return {data, icon, description, dayConditions, address}
-}
-// clog( weatherTomorrow("canada") )
 
 const weatherNextComingDays = async function(days = 7, location, selectedMetric ) {
     let weatherData = await getRawWeatherData(location, selectedMetric)
@@ -82,14 +66,15 @@ const weatherNextComingDays = async function(days = 7, location, selectedMetric 
 // clog( weatherNextComingDays(3, "paris", "intl-metric") )
 
 // weatherToday("paris").then(msg => { clog(msg.description) })
+// clog( weatherNextComingDays(2) )
 
 
-
-// DOM manipulation
+/// DOM manipulation
 
 const tempButton = document.querySelector(".weather-temp-intro button")
 const tempDegSymbolDiv = document.querySelector(".weather-temp-div .temp-deg-symbol")
 
+// data conversion
 let currentMetric = "us"
 let requiredConversion = false
 
@@ -109,18 +94,16 @@ const toKmh = function(mph){
     return mph * 1.609
 }
 
-clog(toMph(4))
-clog(toKmh(4))
-clog( toCelsius(30) )
-clog( toFahrenheit(1) )
-
 tempButton.addEventListener("click", () => {
     requiredConversion = true
     toggleMetric()
 })
 
-let strTest = "Wind: 10.8 mph"
-clog(strTest.slice(5).slice(0, -4))
+// let strTest = "Wind: 10.8 mph"
+// clog(strTest.slice(5).slice(0, -4))
+
+
+// Event listeners
 
 const toggleMetric = function() {
     const tempNumberDiv = document.querySelector(".weather-temp-div .temp-number")
@@ -156,13 +139,6 @@ const toggleMetric = function() {
 }
 toggleMetric()
 
-
-
-
-
-
-
-
 const populateDisplay = async function(searchedLocation, selectedMetric){
     if (!searchedLocation) {
         clog("🔔 No search term provided!")
@@ -173,7 +149,7 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
         let city = responseData.address
         let description = responseData.description
         let tempDeg = responseData.dayConditions.temp.toFixed(0)
-        clog(`🔔 tempDeg = ${tempDeg} `)
+        // clog(`🔔 tempDeg = ${tempDeg} `)
         let precipitation = responseData.dayConditions.precipprob
         let humidity = responseData.dayConditions.humidity
         let windSpeed = responseData.dayConditions.windspeed
@@ -194,11 +170,38 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
         info1Div.textContent = `Precipitation: ${precipitation}%`
         info2Div.textContent = `Humidity: ${humidity}%` 
         info3Div.textContent = `Wind: ${windSpeed} mph`
+
+        /// Bottom cards
+
+        // Looping days using "for ... loop" below
+        // Will be incrementing "base" date by twentyFourHours (24h = 8.64e+7ms) each iteration 
+
+        let twentyFourHours = 0
+        for (let i = 1; i <= 8; i++) {
+            twentyFourHours += 8.64e+7
+
+            // subtracting 24h (in milliseconds) (from "base") helps starts 
+            // iterating from today's date
+            let base = Date.now() - 8.64e+7
+
+            // Now ready to start incrementing.
+            let currentDate = base + twentyFourHours
+            let currentDateDay = new Date(currentDate).getDay()
+            clog(currentDateDay)
+            // Indexing div element by ids based on current (i) index
+            const cardDayDiv = document.querySelector(`#weather-card${i} .day`)
+            const cardTempDiv = document.querySelector(`#weather-card${i} .temp`)
+
+            // Giving day title & temp data to div element based on "currentDateDay"
+            // currentDateDay will returns successive date each iteration)
+            // Each date corresponds to one of the 7 days of the week.
+            cardDayDiv.textContent = `${dayArray[currentDateDay]}`
+            cardTempDiv.textContent = `${responseData.data15Days[i-1].temp}°`
+        }
     }
-    
 }
 
-// populateDisplay("canada")
+populateDisplay("tokyo") 
 
 const searchInput = document.querySelector("label input")
 const searchBtn = document.querySelector("label button")
