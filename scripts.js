@@ -11,10 +11,12 @@ const getDayString = function(){
     return dayArray[dateNowDay]
 }
 
+
 clog(dateNowDay)
 clog(getDayString())
 
 const getRawWeatherData = async function(location = "london") {
+    skeletonLoadingBegins()
     const serverBaseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline"
     const apiKey = "7SZB422JF2656H4U2T3XMFNE5"
     const url = `${serverBaseUrl}/${location}?key=${apiKey}`
@@ -22,6 +24,7 @@ const getRawWeatherData = async function(location = "london") {
     try {
     const rawWeatherData = await fetch( url )
     const weatherData = await rawWeatherData.json()
+    skeletonLoadingEnds()
     return weatherData
 
     } catch(error) {clog(error)}
@@ -71,6 +74,42 @@ const weatherNextComingDays = async function(days = 7, location, selectedMetric 
 
 /// DOM manipulation
 
+// Function to start skeleton loading by adding "skeleton" classes to group
+// Skeleton are always enabled  on page load by default at css (animation)
+
+function skeletonLoadingBegins() {
+    
+    const allLoadingDivBg = document.querySelectorAll(".container-top, .div-right, .container-body ")
+    const allLoadingDiv = document.querySelectorAll(".div-left")
+
+    allLoadingDivBg.forEach(i => {
+        i.classList.add("loading-div-bg")
+    })
+
+    allLoadingDiv.forEach(i => {
+        i.classList.add("loading-div")
+    })
+}
+
+// Function to stop skeleton loading by removing "skeleton" classes from group
+
+ function skeletonLoadingEnds() {
+    // grouping divs by classes
+    const allLoadingDivBg = document.querySelectorAll(".container-top, .div-right, .container-body ")
+    const allLoadingDiv = document.querySelectorAll(".div-left")
+
+    allLoadingDivBg.forEach(i => {
+        i.classList.remove("loading-div-bg")
+    })
+
+    allLoadingDiv.forEach(i => {
+        i.classList.remove("loading-div")
+    })
+}
+
+// Will disable skeleton only if weather data become available
+
+
 const tempButton = document.querySelector(".weather-temp-intro button")
 const tempDegSymbolDiv = document.querySelector(".weather-temp-div .temp-deg-symbol")
 
@@ -99,7 +138,7 @@ tempButton.addEventListener("click", () => {
     toggleMetric()
 })
 
-// let strTest = "Wind: 10.8 mph"
+// let strTest = "Wind: 10.8 mph" 
 // clog(strTest.slice(5).slice(0, -4))
 
 
@@ -146,6 +185,9 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
     }
     else {
         let responseData = await weatherToday(searchedLocation)
+        //Disabling skeleton loading once server returns data
+        // .then( msg => clog(msg.data) )
+
         let city = responseData.address
         let description = responseData.description
         let tempDeg = responseData.dayConditions.temp.toFixed(0)
@@ -174,7 +216,8 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
         /// Bottom cards
 
         // Looping days using "for ... loop" below
-        // Will be incrementing "base" date by twentyFourHours (24h = 8.64e+7ms) each iteration 
+        // Will be incrementing "base" date by 
+        // twentyFourHours (24h = 8.64e+7ms) each iteration 
 
         let twentyFourHours = 0
         for (let i = 1; i <= 8; i++) {
@@ -196,12 +239,11 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
             // currentDateDay will returns successive date each iteration)
             // Each date corresponds to one of the 7 days of the week.
             cardDayDiv.textContent = `${dayArray[currentDateDay]}`
-            cardTempDiv.textContent = `${responseData.data15Days[i-1].temp}°`
+            cardTempDiv.textContent = `${responseData.data15Days[i-1].temp}°F`
         }
     }
 }
 
-populateDisplay("tokyo") 
 
 const searchInput = document.querySelector("label input")
 const searchBtn = document.querySelector("label button")
@@ -210,6 +252,7 @@ clog(searchInput)
 searchBtn.addEventListener("click", (e) => {
     if(searchInput.value){
         e.preventDefault()
+        // skeletonLoadingBegins()
         populateDisplay(searchInput.value)
         requiredConversion = true
         clog("🚨 Showing default unit but set requiredConversion.")
@@ -222,4 +265,5 @@ searchBtn.addEventListener("click", (e) => {
     }
 })
 
-
+// Loading page by default with live weather data
+populateDisplay("tokyo") 
