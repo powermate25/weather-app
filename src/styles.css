@@ -54,7 +54,7 @@ body{
     border: 4px solid #ffffff;
     border-radius: 50%;
 } */
- 
+
 /* Logo hidden in html might enable it later */
 
 /* Search bar */
@@ -63,7 +63,7 @@ label[for="search"] {
     border: 1px solid #ffffff;
     background-color: #ffffff;
     padding: 0.2rem;
-    border-radius: 6px;
+    border-radius: 6px; 
     height: 2rem;
     display: flex;
     justify-content: center;

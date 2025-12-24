@@ -245,7 +245,7 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
         const backgroundDiv = document.querySelector("body")
         let bgImage = await import(`./images/bg/${responseData.dayConditions.icon}.jpg`)
         clog(bgImage)
-        const bgImageFile = bgImage.default
+        const bgImageFile = bgImage.default 
         backgroundDiv.style.cssText = `background-image: url("${bgImageFile}");`
         clog(backgroundDiv.style.backgroundImage)
 
