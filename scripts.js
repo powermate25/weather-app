@@ -233,6 +233,11 @@ const populateDisplay = async function(searchedLocation, selectedMetric){
         info1Div.textContent = `Precipitation: ${precipitation}%`
         info2Div.textContent = `Humidity: ${humidity}%` 
         
+        // Dynamic Background-images
+        const backgroundDiv = document.querySelector("body")
+        backgroundDiv.style.cssText = `
+        background-image: url("./images/bg/${responseData.dayConditions.icon}.jpg");`
+        clog(backgroundDiv.style.backgroundImage)
 
         /// Bottom cards
 

@@ -9,11 +9,25 @@ body{
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    margin: 0;
 }
 
 * {
     box-sizing: border-box;
     padding: 0;
+}
+
+.bg-overlay {
+    position: fixed;
+    /* border: 1px solid blue; */
+    width: 100vw;
+    height: 100vh; 
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    filter: brightness(80%);
+    z-index: -1;
+    
+    
 }
 
 /* Search bar */
@@ -70,7 +84,7 @@ label button {
 
 .container-top {
     border: 1px solid oklch(29.3% 0.066 243.157);
-    border-radius: 6px;
+    border-radius: 8px;
     /* background-color: #0d0d15; */
     background-color: oklch(15% 0.066 243.157);
     display: flex;
@@ -252,7 +266,7 @@ label button {
 
 .weather-card:first-child {
     border-bottom: 1px solid oklch(29.3% 0.066 243.157);
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: oklch(15% 0.066 243.157);
 }
 
