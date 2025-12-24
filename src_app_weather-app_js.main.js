@@ -167,6 +167,14 @@ var map = {
 		"./src/app/images/icons/cloudy.svg",
 		"src_app_images_icons_cloudy_svg"
 	],
+	"./logo-cloud.svg": [
+		"./src/app/images/icons/logo-cloud.svg",
+		"src_app_images_icons_logo-cloud_svg"
+	],
+	"./logo.svg": [
+		"./src/app/images/icons/logo.svg",
+		"src_app_images_icons_logo_svg"
+	],
 	"./partly-cloudy-day.svg": [
 		"./src/app/images/icons/partly-cloudy-day.svg",
 		"src_app_images_icons_partly-cloudy-day_svg"
